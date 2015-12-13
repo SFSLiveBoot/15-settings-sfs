@@ -1,0 +1,7 @@
+[Unit]
+Description=Run dkms autoinstall
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/dkms autoinstall

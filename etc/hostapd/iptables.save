@@ -1,0 +1,19 @@
+*filter
+:FORWARD DROP [:]
+:log-n-accept - [:]
+-A FORWARD -i lo -j ACCEPT
+-A FORWARD -m state --state ESTABLISHED -j ACCEPT
+-A FORWARD -m state --state RELATED -j log-n-accept
+-A FORWARD -m mark --mark 0x1/0x1 -j log-n-accept
+-A FORWARD -j LOG --log-prefix "FWD-DROP:"
+-A log-n-accept -j LOG --log-prefix "FWD-ACCEPT:"
+-A log-n-accept -j ACCEPT
+COMMIT
+
+*nat
+-A POSTROUTING -m mark --mark 0x1/0x1 -j MASQUERADE
+COMMIT
+
+*mangle
+-A FORWARD -i wlan0 -o eth0 -j MARK --set-xmark 0x1/0x1
+COMMIT

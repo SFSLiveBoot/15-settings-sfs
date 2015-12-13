@@ -1,0 +1,22 @@
+# prereq:
+#  sysctl net.ipv4.ip_forward=1
+
+*nat
+-A POSTROUTING -m mark --mark 0x1/0x1 -j MASQUERADE
+COMMIT
+
+*filter
+:FORWARD DROP [:]
+:fwd-ok - [:]
+-A FORWARD -m state --state ESTABLISHED -j ACCEPT
+-A FORWARD -m mark --mark 0x1/0x1 -j fwd-ok
+-A FORWARD -m state --state RELATED -j fwd-ok
+-A FORWARD -j LOG --log-level warning --log-prefix FWD-DROP:
+-A fwd-ok -j LOG --log-level info --log-prefix FWD-OK:
+-A fwd-ok -j ACCEPT
+COMMIT
+
+*mangle
+-A FORWARD -i wlan+ -o ppp+ -j MARK --set-xmark 0x1/0x1
+-A FORWARD -i wlan+ -o eth+ -j MARK --set-xmark 0x1/0x1
+COMMIT

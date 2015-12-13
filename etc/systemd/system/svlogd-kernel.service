@@ -1,0 +1,7 @@
+[Unit]
+Description=Save systemd journal kernel messages to /var/log/kernel
+After=systemd-journald.service
+
+[Service]
+Environment=LANG=en_US.utf8
+ExecStart=/bin/sh -c 'mkdir -p /var/log/kernel; exec journalctl -f _TRANSPORT=kernel | exec svlogd /var/log/kernel'

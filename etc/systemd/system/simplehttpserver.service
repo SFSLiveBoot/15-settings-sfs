@@ -1,0 +1,4 @@
+[Service]
+User=www-data
+WorkingDirectory=/var/www
+ExecStart=/usr/bin/python -mSimpleHTTPServer

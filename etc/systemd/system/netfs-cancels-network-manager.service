@@ -1,0 +1,11 @@
+[Unit]
+Description=Cancel starting NetworkManager service if any network filesystems are mounted
+Before=network-manager.service NetworkManager.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/sh -c 'if cut -f3 -d " " /proc/mounts | grep -Fqx -e cifs -e nfs; then systemctl stop network-manager.service; sed -e s/NetworkingEnabled=true/NetworkingEnabled=false/ -i /var/lib/NetworkManager/NetworkManager.state || true; fi'
+
+[Install]
+RequiredBy=network-manager.service

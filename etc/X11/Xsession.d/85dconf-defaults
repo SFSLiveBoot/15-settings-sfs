@@ -1,0 +1,11 @@
+
+# initialize dconf settings from $HOME/.config/dconf.d
+
+mkdir -p "$HOME/.cache/dconf.d"
+
+for _f in "$HOME"/.config/dconf.d/*.conf;do
+  test -e "$_f" || continue
+  _f_cache="$HOME/.cache/dconf.d/${_f##*/}"
+  test "$_f" -ot "$_f_cache" ||
+    tee "$_f_cache" <"$_f" | dconf load /
+done

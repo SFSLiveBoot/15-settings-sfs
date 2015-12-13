@@ -1,0 +1,8 @@
+[Unit]
+ConditionKernelCommandLine=run-live
+ConditionFileIsExecutable=/live/.run
+Before=graphical.target
+
+[Service]
+Type=oneshot
+ExecStart=/live/.run

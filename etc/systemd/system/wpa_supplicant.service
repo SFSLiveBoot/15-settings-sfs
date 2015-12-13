@@ -1,0 +1,11 @@
+[Unit]
+Description=WPA supplicant
+
+[Service]
+Type=dbus
+BusName=fi.epitest.hostap.WPASupplicant
+ExecStart=/sbin/wpa_supplicant -u -s -O "DIR=/var/run/wpa_supplicant GROUP=netdev" -g /var/run/wpa_supplicant.ctrl
+
+[Install]
+WantedBy=multi-user.target
+Alias=dbus-fi.epitest.hostap.WPASupplicant.service

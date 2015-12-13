@@ -1,0 +1,13 @@
+[Unit]
+Description=Generate hostname if not defined
+DefaultDependencies=no
+ConditionPathExists=!/etc/hostname
+Before=remount-rootfs.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/LiveBootUtils/scripts/generate-hostname.sh
+
+[Install]
+WantedBy=sysinit.target

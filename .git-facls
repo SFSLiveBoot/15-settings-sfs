@@ -1,0 +1,20 @@
+# file: var/www
+# group: staff
+user::rwx
+group::rwx
+other::r-x
+
+# file: usr/local
+# group: staff
+# flags: -s-
+user::rwx
+group::rwx
+other::r-x
+
+# file: root/.config
+# owner: root
+# group: root
+user::rwx
+group::---
+other::---
+

@@ -1,0 +1,9 @@
+#auto br0
+iface br0 inet static
+  address 10.1.1.254
+  netmask 255.255.255.0
+  bridge_ports none
+  bridge_maxwait 0
+  up sysctl net.ipv4.ip_forward | grep -q ' = 1$' || { sysctl net.ipv4.ip_forward=1 ; iptables-save -t filter | grep -qw ^:log-n-accept || { iptables -P FORWARD DROP; iptables -A FORWARD -i $IFACE -o $IFACE -j ACCEPT; iptables -A FORWARD -m state --state ESTABLISHED -j ACCEPT; iptables -N log-n-accept; iptables -A log-n-accept -j LOG --log-level notice --log-prefix FWD-ACCEPT:; iptables -A log-n-accept -j ACCEPT; iptables -A FORWARD -m mark --mark 1/1 -j log-n-accept; iptables -A FORWARD -m state --state RELATED -j log-n-accept; iptables -A FORWARD -j LOG --log-level warning --log-prefix FWD-DROP:; }; }
+  up iptables-save -t mangle | grep -wq $IFACE || iptables -t mangle -A FORWARD -i $IFACE ! -o $IFACE -s 10.1.1.0/24 -j MARK --set-mark 1/1
+  up iptables-save -t nat | grep -wq mark || iptables -t nat -A POSTROUTING -m mark --mark 1/1 -j MASQUERADE

@@ -1,0 +1,14 @@
+
+# allow putting .desktop etc. files to /opt/share/applications
+
+case "$XDG_DATA_DIRS" in
+  /opt/share:*|*:/opt/share:*|*:/opt/share|/opt/share) ;;
+  *) export XDG_DATA_DIRS="/opt/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" ;;
+esac
+
+# allow running binaries from /opt/bin without path
+
+case "$PATH" in
+  /opt/bin:*|*:/opt/bin:*|*:/opt/bin|/opt/bin) ;;
+  *) export PATH="/opt/bin:${PATH:-/bin:/usr/bin}" ;;
+esac

@@ -1,0 +1,10 @@
+[Service]
+ExecStartPre=/usr/bin/update-mime-database /usr/share/mime
+ExecStartPre=/usr/sbin/update-mime --triggered
+ExecStartPre=/usr/bin/gtk-update-icon-cache --force --quiet /usr/share/icons/hicolor
+ExecStartPre=/usr/bin/gtk-update-icon-cache --force --quiet /usr/share/icons/gnome
+ExecStartPre=/usr/bin/update-desktop-database -q
+ExecStartPre=/usr/sbin/gnome-menus-blacklist
+ExecStartPre=/usr/bin/update-menus --trigger
+ExecStart=/usr/lib/x86_64-linux-gnu/glib-2.0/glib-compile-schemas /usr/share/glib-2.0/schemas
+Type=oneshot

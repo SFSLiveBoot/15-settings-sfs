@@ -1,0 +1,42 @@
+amenu <silent> Window.Fullscreen<Tab><F11> :call ToggleFullScreen()<cr>
+amenu <silent> icon=New 1.2 ToolBar.New :tabe<cr>
+
+set lbr nu fdc=5 go+=bL cul stal=2
+
+let &gfn=substitute(system("gsettings get org.gnome.desktop.interface monospace-font-name || gconftool-2 -g /desktop/gnome/interface/monospace_font_name"),"['\n]","","g")
+
+if filereadable("/usr/share/ion3/ion-runinxterm")
+  set kp=/usr/share/ion3/ion-runinxterm\ man
+endif
+
+map <A-1> :tabn 1<cr>
+map <A-2> :tabn 2<cr>
+map <A-3> :tabn 3<cr>
+map <A-4> :tabn 4<cr>
+map <A-5> :tabn 5<cr>
+map <A-6> :tabn 6<cr>
+map <A-7> :tabn 7<cr>
+map <A-8> :tabn 8<cr>
+map <A-9> :tabn 9<cr>
+map <A-0> :tabn 10<cr>
+
+map <F10> :noh<CR>
+map <F11> :em Window.Fullscreen<CR>
+map <S-F11> :set go+=bmT<CR>
+
+map <A-o> :browse tabe<cr>
+map <A-q> :q<cr>
+map <A-d> :bd<cr>
+
+vmap <C-c> "+y
+imap <C-space> <C-x><C-o>
+
+let &guicursor = &guicursor . ",a:blinkon0"
+
+function! ToggleFullScreen()
+  if matchstr(&go,"m")==""
+    set go+=T go+=b go+=m cul ls=2 stal=2 fdc=5 nu
+  else
+    set go-=T go-=b go-=m nocul ls=1 stal=1 fdc=0 nonu
+  endif
+endfunction

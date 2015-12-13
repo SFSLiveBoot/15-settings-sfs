@@ -1,0 +1,11 @@
+[Unit]
+Description=Redirect systemd journal to /var/log/syslog
+After=systemd-journald.service
+Wants=svlogd-kernel.service
+
+[Service]
+Environment=LANG=en_US.utf8
+ExecStart=/bin/sh -c 'mkdir -p /var/log/syslog; exec journalctl -f _TRANSPORT=syslog | exec svlogd /var/log/syslog'
+
+[Install]
+Alias=syslog.service

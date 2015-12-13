@@ -1,0 +1,98 @@
+if has('gui') && $DISPLAY!="" && $SSH_CONNECTION==""
+  if v:progname=="editor" || $SUDO_COMMAND=="/usr/sbin/visudo"
+    gui -f
+  else
+    gui
+  endif
+endif
+
+sy on
+set nocp ls=2 is hls scs ai ic sm bs=2 nocin si fdm=marker fdc=1 pt=<F12> so=5 nu t_ti= t_te= fdl=3
+set fencs=ucs-bom,utf-8,iso-2022-jp,sjis,euc-jp,big5,latin1
+set statusline=%f%m%r%h%w\ %{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%y\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L] 
+set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+
+set nofs noswf swapsync= "turn off syncing
+let javaScript_fold=1
+let g:xml_syntax_folding = 1
+
+imap <F9> <c-r>=strftime("%Y-%m-%d")<cr>
+map <F9> :if &bg=="light" \| set bg=dark \| else \| set bg=light \| endif<cr>
+
+
+map <A-Left> :lp<cr>
+map <A-Right> :lne<cr>
+map <C-up> <C-w><up>
+map <C-down> <C-w><down>
+
+map <F7> :lgrep -Fr <cword> %:p:h<cr>:tab lw<cr>
+vmap <F7> "gy:lgrep -Fr "<c-r>g" %:p:h<cr>:tab lw<cr>
+
+map <S-F7> :lgrep -Fr <cword> .<cr>:tab lw<cr>
+vmap <S-F7> "gy:lgrep -Fr "<c-r>g" .<cr>:tab lw<cr>
+
+map <F2> :up<cr>
+map <F3> :tabe <cfile><cr>
+vmap <F3> "fy:tabe "<c-r>f"<cr>
+
+function! UpdateVersion(dstr,vpat)
+  let verpos=search(a:vpat,"n")
+  if verpos!=0
+    let m=matchlist(getline(verpos),a:vpat)
+    if m[2]!=a:dstr
+      call setline(verpos,m[1].a:dstr.m[3])
+    endif
+  endif
+endfunction
+
+augroup Vimrc
+  au!
+  au BufReadPre *.nfo setlocal fencs=cp437,latin1
+  au BufReadPre *.xul setlocal ft=xml
+  au BufNewFile,BufReadPre *.jsm setlocal ft=javascript
+
+  au FileType css,htmltmpl,php,apache,vim,dtd,javascript,html,xml,htmldjango setlocal ts=2 sw=2 et mps+=<:>
+  au FileType zsh,sh setlocal et ts=2 sw=2
+  au FileType python setlocal ts=4 sw=4 et
+  au FileType lua setlocal et ts=4 sw=4
+  au FileType xf86conf setlocal et ts=4 sw=4
+
+  au BufNewFile *.* let tmpl = expand("~/Templates/*.".expand("%:e")) | if filereadable(tmpl) | call append(0,readfile(tmpl)) | $delete | endif
+
+  au BufNewFile *.bat,*.cmd,*.vbs setl ff=dos
+  au BufNewFile *.* setl fenc=utf8
+
+  au FileType python map <F12> :w\|!x-terminal-emulator -T '%' -e ipython %<cr>
+
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+  au BufReadPost *.pdf map <F7> "qy2w/\<<c-r>q\<\(obj\\|R\)\><cr>
+
+  au BufWrite *.py call UpdateVersion(strftime("%Y%m%d"),'^\(version=(\%([0-9]\+,\)\+\)\(\d\{8\}\)\()\)')
+
+  autocmd BufRead *.vala set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
+  autocmd BufRead *.vapi set efm=%f:%l.%c-%[%^:]%#:\ %t%[%^:]%#:\ %m
+  au BufRead,BufNewFile *.vala            setfiletype vala
+  au BufRead,BufNewFile *.vapi            setfiletype vala
+
+augroup END
+
+augroup Binary
+  au!
+  au BufReadPre  *.bin let &bin=1
+  au BufReadPost *.bin if &bin | %!xxd
+  au BufReadPost *.bin set ft=xxd | endif
+  au BufWritePre *.bin if &bin | %!xxd -r
+  au BufWritePre *.bin endif
+  au BufWritePost *.bin if &bin | %!xxd
+  au BufWritePost *.bin set nomod | endif
+augroup END
+
+augroup JadClass
+  au!
+  au BufReadPost *.class setl ro ft=java | %!jad -lnc -p %
+augroup END
+
+let html_number_lines=0
+let html_use_css=1
+let html_no_pre = 1
+
