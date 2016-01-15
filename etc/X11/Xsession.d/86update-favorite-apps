@@ -1,0 +1,12 @@
+#!/bin/sh
+
+_fav_apps="$(gsettings get org.gnome.shell favorite-apps)"
+for _df in "$HOME"/.local/share/favorite-apps/*.desktop;do
+  test -e "$_df" || continue
+  _df="${_df##*/}"
+  case "$_fav_apps" in
+    *"'$_df'"*) ;;
+    *) _fav_apps="${_fav_apps%]},'$_df']";;
+  esac
+done
+gsettings set org.gnome.shell favorite-apps "$_fav_apps"
