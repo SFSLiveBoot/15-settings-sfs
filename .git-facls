@@ -11,10 +11,3 @@ user::rwx
 group::rwx
 other::r-x
 
-# file: root/.config
-# owner: root
-# group: root
-user::rwx
-group::---
-other::---
-
