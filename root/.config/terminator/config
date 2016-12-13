@@ -1,0 +1,5 @@
+[profiles]
+  [[default]]
+    login_shell = True
+    scroll_on_output = False
+    scrollback_infinite = True
