@@ -1,7 +1,7 @@
 #!/bin/sh
 
 _fav_apps="$(gsettings get org.gnome.shell favorite-apps)"
-for _df in "$HOME"/.local/share/favorite-apps/*.desktop;do
+for _df in "$HOME"/.local/share/favorite-apps/*.desktop /opt/share/favorite-apps/*.desktop;do
   test -e "$_df" || continue
   _df="${_df##*/}"
   case "$_fav_apps" in
