@@ -1,0 +1,3 @@
+[submodule "usr/share/gnome-shell/extensions/TaskBar@zpydr"]
+	path = usr/share/gnome-shell/extensions/TaskBar@zpydr
+	url = https://github.com/zpydr/gnome-shell-extension-taskbar
