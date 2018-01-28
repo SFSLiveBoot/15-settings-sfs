@@ -1,0 +1,4 @@
+[Service]
+ExecStart=/bin/sh -e -c '. /etc/default/tor; case "$RUN_DAEMON" in no|0) echo "/etc/default/tor: RUN_DAEMON=$RUN_DAEMON"; exit 1;; esac'
+Type=oneshot
+RemainAfterExit=no
