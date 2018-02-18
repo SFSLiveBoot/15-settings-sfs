@@ -1,0 +1,4 @@
+[Sound Theme]
+Name=Freedesktop + Gnome sonar
+Inherits=freedesktop
+Directories=.
