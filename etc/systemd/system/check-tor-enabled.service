@@ -1,4 +1,4 @@
 [Service]
-ExecStart=/bin/sh -e -c '. /etc/default/tor; case "$RUN_DAEMON" in no|0) echo "/etc/default/tor: RUN_DAEMON=$RUN_DAEMON"; exit 1;; esac'
+ExecStart=/bin/sh -e -c '. /etc/default/tor; if test "x$RUN_DAEMON" = "xyes";then touch /var/lib/tor/.enabled;else echo "Tor not enabled in /etc/default/tor: RUN_DAEMON=$RUN_DAEMON";fi'
 Type=oneshot
 RemainAfterExit=no
