@@ -1,0 +1,11 @@
+[Unit]
+Description=Generate locale definition based on /etc/default/locale
+Before=gdm.service
+
+[Service]
+EnvironmentFile=/etc/default/locale
+Type=oneshot
+ExecStart=/bin/sh -e -c 'cc="$${LANG#*.}"; case "$cc" in utf8) cc="UTF-8";;esac;locale -a | grep -qxF "$LANG" || localedef -i "$${LANG%.*}" -f "$cc" "$LANG"'
+
+[Install]
+WantedBy=multi-user.service
