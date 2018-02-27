@@ -5,7 +5,7 @@ Before=gdm.service
 [Service]
 EnvironmentFile=/etc/default/locale
 Type=oneshot
-ExecStart=/bin/sh -e -c 'cc="$${LANG#*.}"; case "$cc" in utf8) cc="UTF-8";;esac;locale -a | grep -qxF "$LANG" || localedef -i "$${LANG%.*}" -f "$cc" "$LANG"'
+ExecStart=/bin/sh -e -c 'for LANG in $LANG $(find /var/lib/AccountsService/users -type f -exec grep ^Language= {} + | cut -f2 -d=);do cc="$${LANG#*.}"; case "$cc" in utf8) cc="UTF-8";;esac;locale -a | grep -qxF "$LANG" || localedef -i "$${LANG%.*}" -f "$cc" "$LANG";done'
 
 [Install]
 WantedBy=multi-user.service
