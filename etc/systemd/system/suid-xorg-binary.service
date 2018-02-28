@@ -1,0 +1,12 @@
+[Unit]
+Before=gdm.service gdm3.service
+ConditionVirtualization=oracle
+ConditionFileIsExecutable=/usr/lib/xorg/Xorg
+
+
+[Service]
+ExecStart=/bin/sh -e -c 'test -u /usr/lib/xorg/Xorg || chmod u+s /usr/lib/xorg/Xorg'
+Type=oneshot
+
+[Install]
+WantedBy=gdm.service
