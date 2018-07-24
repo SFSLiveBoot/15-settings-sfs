@@ -5,4 +5,4 @@ Before=graphical.target systemd-timedated.service
 [Service]
 Type=oneshot
 ExecStart=/bin/sh -e -x -c 'exec ln -sf "../usr/share/zoneinfo/$(grep -ow "tz=[^[:space:]]*" /proc/cmdline | cut -f2 -d=)" /etc/localtime'
-ExecStartPost=/sbin/hwlock -s
+ExecStartPost=/sbin/hwclock -s
