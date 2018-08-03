@@ -1,0 +1,10 @@
+[Unit]
+ConditionPathExists=%f
+Before=graphical.target
+
+[Service]
+ExecStart=/usr/bin/update-alternatives --install /usr/share/backgrounds/default default-background %f 10
+ExecStartPost=/usr/bin/update-alternatives --auto default-background
+
+[Install]
+WantedBy=multi-user.target
