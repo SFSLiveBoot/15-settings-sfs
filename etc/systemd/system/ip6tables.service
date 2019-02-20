@@ -1,0 +1,10 @@
+[Unit]
+ConditionFileNotEmpty=/etc/network/ip6tables.save
+Before=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/ip6tables-restore /etc/network/ip6tables.save
+
+[Install]
+WantedBy=multi-user.service

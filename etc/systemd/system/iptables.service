@@ -1,0 +1,10 @@
+[Unit]
+ConditionFileNotEmpty=/etc/network/iptables.save
+Before=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=/sbin/iptables-restore /etc/network/iptables.save
+
+[Install]
+WantedBy=multi-user.service
