@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+StartupNotify=false
+NoDisplay=true
+Name=Update favorite apps list
+Exec=sh /etc/X11/Xsession.d/86update-favorite-apps

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+StartupNotify=false
+NoDisplay=true
+Name=Load dconf defaults
+Exec=sh /etc/X11/Xsession.d/85dconf-defaults
