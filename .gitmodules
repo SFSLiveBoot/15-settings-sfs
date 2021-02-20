@@ -4,3 +4,7 @@
 [submodule "usr/share/gnome-shell/extensions/gsmemmon@korc.github.io"]
 	path = usr/share/gnome-shell/extensions/gsmemmon@korc.github.io
 	url = https://github.com/korc/gsmemmon
+[submodule "usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com"]
+	path = usr/share/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
+	url = https://github.com/micheleg/dash-to-dock.git
+	branch = gnome-3.20
