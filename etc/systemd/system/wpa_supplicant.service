@@ -3,7 +3,7 @@ Description=WPA supplicant
 
 [Service]
 Type=dbus
-BusName=fi.epitest.hostap.WPASupplicant
+BusName=fi.w1.wpa_supplicant1
 ExecStart=/sbin/wpa_supplicant -u -g/var/run/wpa_supplicant.ctrl -c/etc/wpa_supplicant/wpa.conf
 
 [Install]
