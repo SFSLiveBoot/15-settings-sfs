@@ -1,0 +1,5 @@
+[Unit]
+Before=user@.service generate-locale.service
+
+[Service]
+ExecStart=/bin/sh -e -c 'localedef --list-archive | grep -qFx "$1" && exit 0 || true; i=$${1%.*} f=$${1#*.}; echo "i=$i f=$f"; test ! "x$f" = "xutf8" || f=UTF-8; localedef -f "$f" -i "$i" "$1"' _ %i
