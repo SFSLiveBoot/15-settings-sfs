@@ -1,0 +1,8 @@
+[Unit]
+ConditionPathExists=%E/saved-settings-path
+
+[Service]
+EnvironmentFile=%E/saved-settings-path
+ExecStartPre=/bin/mkdir -p ${SETTINGS_PATH}
+ExecStart=/bin/cp --parents -avut ${SETTINGS_PATH} %f
+SyslogIdentifier=save-setting
