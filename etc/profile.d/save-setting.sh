@@ -1,13 +1,18 @@
 #!/bin/sh
 
-save-setting() {
+__save_setting_normalize_path() {
+	echo "$1" | sed -zE -e 's@/\./@/@g' -e 's@/+@/@g' -e :top -e 's@^/\.\.(/|$)@/@' -e 's@/([^/]+)/\.\.(/|$)@\2@' -e '/\/\.\.\//b top'
+}
+
+save_setting() {
+	local path _save_once=""
 	test -r "$HOME/.config/saved-settings-path" || {
 		echo "Error: need to configure path with 'save-setting-path'" >&2
 		return 1
 	}
 	case "$1" in
 	-h | --help)
-		echo "Usage: $FUNCNAME [[{--del}] <path>]"
+		echo "Usage: $FUNCNAME [[{--del|--once}] <path>]"
 		return
 		;;
 	"")
@@ -22,27 +27,34 @@ save-setting() {
 		shift
 		for path; do
 			case "$path" in /*) ;; *) path="$PWD/$path" ;; esac
-      path="$(echo "$path" | sed -E -e 's@/\./@/@g' -e 's@/+@/@g' -e :top -e 's@^/\.\./@/@' -e '/^\/\.\.\//b top' -e 's@/([^/]+)/\.\.(/|$)@\2@g')"
+			path="$(__save_setting_normalize_path "$path")"
 			systemctl --user disable --now "save-setting@$(systemd-escape -p "$path").path"
 			(
+				# shellcheck disable=SC1091
 				. "$HOME/.config/saved-settings-path"
 				rm -v "$SETTINGS_PATH$HOME/.config/systemd/user/default.target.wants/save-setting@$(systemd-escape -p "$path").path"
 			)
 		done
 		;;
-	*)
+	--once | *)
+		case "$1" in --once)
+			_save_once=1
+			shift
+			;;
+		esac
 		for path; do
 			case "$path" in /*) ;; *) path="$PWD/$path" ;; esac
-      path="$(echo "$path" | sed -E -e 's@/\./@/@g' -e 's@/+@/@g' -e :top -e 's@^/\.\.(/|$)@/@' -e 's@/([^/]+)/\.\.(/|$)@\2@' -e '/\/\.\.\//b top')"
-			systemctl --user enable --now "save-setting@$(systemd-escape -p "$path").path"
+			path="$(__save_setting_normalize_path "$path")"
 			systemctl --user start "save-setting@$(systemd-escape -p "$path").service"
+			test -z "$_save_once" || continue
+			systemctl --user enable --now "save-setting@$(systemd-escape -p "$path").path"
 			systemctl --user start "save-setting@$(systemd-escape -p "$HOME/.config/systemd/user/default.target.wants/save-setting@$(systemd-escape -p "$path").path").service"
 		done
 		;;
 	esac
 }
 
-save-setting-path() {
+save_setting_path() {
 	if test -n "$1"; then
 		test -d "$1" || {
 			echo "Usage: $FUNCNAME [<directory>]" >&2
