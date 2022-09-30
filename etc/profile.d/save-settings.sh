@@ -1,13 +1,13 @@
 #!/bin/sh
 
-__save_setting_normalize_path() {
+__save_settings_normalize_path() {
 	echo "$1" | sed -zE -e 's@/\./@/@g' -e 's@/+@/@g' -e :top -e 's@^/\.\.(/|$)@/@' -e 's@/([^/]+)/\.\.(/|$)@\2@' -e '/\/\.\.\//b top'
 }
 
-save_setting() {
+save_settings() {
 	local path _save_once=""
 	test -r "$HOME/.config/saved-settings-path" || {
-		echo "Error: need to configure path with 'save-setting-path'" >&2
+		echo "Error: need to configure path with 'save_settings_path'" >&2
 		return 1
 	}
 	case "$1" in
@@ -27,7 +27,7 @@ save_setting() {
 		shift
 		for path; do
 			case "$path" in /*) ;; *) path="$PWD/$path" ;; esac
-			path="$(__save_setting_normalize_path "$path")"
+			path="$(__save_settings_normalize_path "$path")"
 			systemctl --user disable --now "save-setting@$(systemd-escape -p "$path").path"
 			(
 				# shellcheck disable=SC1091
@@ -44,7 +44,7 @@ save_setting() {
 		esac
 		for path; do
 			case "$path" in /*) ;; *) path="$PWD/$path" ;; esac
-			path="$(__save_setting_normalize_path "$path")"
+			path="$(__save_settings_normalize_path "$path")"
 			systemctl --user start "save-setting@$(systemd-escape -p "$path").service"
 			test -z "$_save_once" || continue
 			systemctl --user enable --now "save-setting@$(systemd-escape -p "$path").path"
@@ -54,7 +54,7 @@ save_setting() {
 	esac
 }
 
-save_setting_path() {
+save_settings_path() {
 	if test -n "$1"; then
 		test -d "$1" || {
 			echo "Usage: $FUNCNAME [<directory>]" >&2
