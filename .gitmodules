@@ -1,9 +1,3 @@
-[submodule "usr/share/gnome-shell/extensions/TaskBar@zpydr"]
-	path = usr/share/gnome-shell/extensions/TaskBar@zpydr
-	url = https://github.com/zpydr/gnome-shell-extension-taskbar
 [submodule "usr/share/gnome-shell/extensions/gsmemmon@korc.github.io"]
 	path = usr/share/gnome-shell/extensions/gsmemmon@korc.github.io
 	url = https://github.com/korc/gsmemmon
-[submodule "usr/share/gnome-shell/extensions/TopIcons@phocean.net"]
-	path = usr/share/gnome-shell/extensions/TopIcons@phocean.net
-	url = https://github.com/phocean/TopIcons-plus
