@@ -1,0 +1,10 @@
+[Unit]
+ConditionKernelCommandLine=rtc
+Before=graphical.target systemd-timedated.service update-tz.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -e -x -c 'sed "3c $(grep -ow "rtc=[^[:space:]]*" /proc/cmdline | cut -f2- -d= | tr a-z A-Z)" -i /etc/adjtime'
+
+[Install]
+WantedBy=multi-user.target
