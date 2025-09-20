@@ -18,10 +18,7 @@ save_settings() {
 	"")
 		systemctl --user list-units -o json "save-setting@*.path" |
 			jq -r ".[].unit" | sort |
-			sed -e 's/^save-setting@//' -e 's/\.path$//' |
-			while read -r path; do
-				systemd-escape -p -u "$path"
-			done
+			sed -e 's/^save-setting@//' -e 's/\.path$//' | xargs -rn1 systemd-escape -p -u
 		;;
 	--del)
 		shift
