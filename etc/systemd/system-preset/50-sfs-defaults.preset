@@ -1,2 +1,3 @@
 disable libvirtd*
 disable snapd.service
+disable strongswan.service
