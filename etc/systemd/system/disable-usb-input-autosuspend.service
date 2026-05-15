@@ -1,0 +1,8 @@
+[Unit]
+After=powertop.service
+
+[Service]
+ExecStart=find /sys/class/input/ -lname '*usb*' -exec sh -c 'for i;do echo on>"$i/power/control";done' _ {} +
+
+[Install]
+WantedBy=powertop.service
